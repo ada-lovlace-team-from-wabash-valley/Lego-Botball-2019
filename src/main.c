@@ -20,8 +20,13 @@ void right(float degrees, int speed);
 void press_a();
 void grab_and_dump();
 
+// TODO:  Do the TODOs below.  Then talk with the team (including Johnny) to decide whether to
+//        bring poms to the bin or to bring the bin to the poms.
+
 int main()
 {
+    // TODO: Make an "initialize" function that puts the servos into their initial positions and enables them.
+    
     //set_servo_position(2, 605);
     //enable_servo(2);
     grab_and_dump();
@@ -34,6 +39,11 @@ int main()
 }
 
 void grab_and_dump() {
+    // TODO: Break this function into three smaller functions:
+    //        - Move servo down, grab and lift
+    //        - Move to bin
+    //        - Drop
+    // TODO: Replace  msleeps   with press_a.
     //1/2 1 open grabber 2 go forward 3 close 4 go forward
     enable_servo(0);
     enable_servo(1);
@@ -56,6 +66,7 @@ void grab_and_dump() {
 }
 
 void david_challenge() {
+    // TODO: Remove this function.
     forward(33, 100);
     msleep(1000);
     set_servo_position(2, 0);

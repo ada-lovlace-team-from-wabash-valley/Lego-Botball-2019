@@ -8,7 +8,7 @@
 
 #define TRUE 1
 #define FALSE 0
-#define DEBUG FALSE
+#define DEBUG TRUE
 #define PRESS_A_MILLISECONDS 200
 #define PRESS_A_HANDS_OFF 500
 
@@ -23,20 +23,19 @@ void grab_and_dump();
 // TODO:  Do the TODOs below.  Then talk with the team (including Johnny) to decide whether to
 //        bring poms to the bin or to bring the bin to the poms.
 
-int main()
-{
+int main(){
+    grab_and_dump();
+    return 0;
+}    
+
     // TODO: Make an "initialize" function that puts the servos into their initial positions and enables them.
     
     //set_servo_position(2, 605);
     //enable_servo(2);
-    grab_and_dump();
-
-    printf("Doggo\n");
+    //grab_and_dump();
 
 
 
-    return 0;
-}
 
 void grab_and_dump() {
     // TODO: Break this function into three smaller functions:
@@ -49,8 +48,15 @@ void grab_and_dump() {
     enable_servo(1);
     set_servo_position(0,1500);
     msleep(1000);
+
     set_servo_position(1,820);
+    right(23,80);
+    forward(31,80);
+    left(90,80);
+    forward(14,80);
+    set_servo_position(1,0);
     msleep(1000);
+    return;
     forward(2,100);
     msleep(1000);
     set_servo_position(1,0);

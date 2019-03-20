@@ -8,10 +8,23 @@
 
 #define TRUE 1
 #define FALSE 0
-#define DEBUG TRUE
+#define DEBUG FALSE
 #define PRESS_A_MILLISECONDS 200
 #define PRESS_A_HANDS_OFF 500
 
+#define ARM_SERVO 0
+#define ARM_DOWN 1500
+#define ARM_MIDDLE 1000
+#define ARM_UP 100
+
+#define CLAW_SERVO 1
+#define CLAW_OPEN 850
+#define CLAW_CLOSE 0
+
+#define NORMAL_SLOW_SERVO_SPEED  10 
+#define NORMAL_SERVO_SPEED       50
+
+void start();
 void forward(float inches, int speed);
 void backward(float inches, int speed);
 void spin(float degrees, int speed);
@@ -19,57 +32,41 @@ void left(float degrees, int speed);
 void right(float degrees, int speed);
 void press_a();
 void grab_and_dump();
+void servo_slowly(int port, int desired_position, int speed);
+void servo(int port, int desired_position);
 
 // TODO:  Do the TODOs below.  Then talk with the team (including Johnny) to decide whether to
 //        bring poms to the bin or to bring the bin to the poms.
 
 int main(){
-    grab_and_dump();
-    return 0;
-}    
-
-    // TODO: Make an "initialize" function that puts the servos into their initial positions and enables them.
     
-    //set_servo_position(2, 605);
-    //enable_servo(2);
-    //grab_and_dump();
-
-
-
-
-void grab_and_dump() {
-    // TODO: Break this function into three smaller functions:
-    //        - Move servo down, grab and lift
-    //        - Move to bin
-    //        - Drop
-    // TODO: Replace  msleeps   with press_a.
-    //1/2 1 open grabber 2 go forward 3 close 4 go forward
-    enable_servo(0);
-    enable_servo(1);
-    set_servo_position(0,1500);
-    msleep(1000);
-
-    set_servo_position(1,820);
+    start();
     right(23,80);
+    msleep(1000);
     forward(31,80);
+    msleep(1000);
     left(90,80);
-    forward(14,80);
-    set_servo_position(1,0);
     msleep(1000);
-    return;
-    forward(2,100);
+    
+    servo(ARM_SERVO, ARM_DOWN);
+    forward(15,80);
     msleep(1000);
-    set_servo_position(1,0);
-    msleep(1000);
-    set_servo_position(0,372);
-    msleep(1000);
-    forward(3,100);
-    msleep(1000);
-    set_servo_position(0,974);
-    msleep(1000);
-    set_servo_position(1,431);
-    msleep(1000);
+    
+    servo(CLAW_SERVO, CLAW_CLOSE);
+    
+     
+    return 0;  
 }
+
+void start()
+{
+    //wait_for_light(0);
+    shut_down_in(119);
+    set_servo_position(ARM_SERVO, ARM_UP);
+    set_servo_position(CLAW_SERVO, CLAW_OPEN);
+    enable_servos();
+}
+
 
 void david_challenge() {
     // TODO: Remove this function.
@@ -132,4 +129,49 @@ void press_a() {
         }
     }
     msleep(PRESS_A_HANDS_OFF);
+}
+
+//This function will move a servo SLOWLY to its desired position.
+void servo(int port, int desired_position)
+{
+    servo_slowly(port, desired_position, NORMAL_SERVO_SPEED);
+}
+
+// Speed is servo units to move each time through the loop.
+void servo_slowly(int port, int desired_position, int speed)
+{
+    int position;
+    int step = speed;
+
+    enable_servo(port);
+
+    if (get_servo_position(port) > desired_position)
+    {
+        while (TRUE)
+        {
+            position = get_servo_position(port);
+            if (position <= desired_position + step)
+            {
+                break;
+            }
+            set_servo_position(port, position - step);
+            msleep (50);
+        }
+
+    } else
+    {
+        while (TRUE)
+        {
+            position = get_servo_position(port);
+            if (position >= desired_position - step)
+            {
+                break;
+            }
+            set_servo_position(port, position + step);
+            msleep (50);
+        }
+    }
+    msleep(50);
+    set_servo_position(port, desired_position);
+    msleep(50);
 }
